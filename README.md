@@ -1,50 +1,46 @@
-# CODSOFT 
-
-
-
-                  
+#CODSOFT 
 
 
 
 
-                                       TASK 1
-                                  NUMBER GUESSING GAME 
-
-  #include <iostream>
+                                                       TASK 1 
+                                              NUMBER GUESSING GAME 
+#include <iostream>
 #include <cstdlib>
 #include <ctime>
 
 int main() {
-   
-    srand(time(0));
+    
+    srand(static_cast<unsigned int>(time(nullptr)));
 
     
-    int randomNumber = rand() % 50 + 1;
+    int secretNumber = rand() % 50 + 1;
 
     
-    int numGuesses = 0;
-
-    
-    int guess;
+    int attempts = 0;
 
     
     while (true) {
-       
+        
+        int guess;
         std::cout << "Guess a number between 1 and 50: ";
         std::cin >> guess;
 
-    
-        numGuesses++;
+       
+        attempts++;
 
        
-        if (guess < randomNumber) {
-            std::cout << "Too low! Try again.\n";
-        } else if (guess > randomNumber) {
-            std::cout << "Too high! Try again.\n";
-        } else {
-          
-            std::cout << "Congratulations! You guessed the number in " << numGuesses << " guesses.\n";
+        if (guess == secretNumber) {
+            std::cout << " Congratulations! You found the number in " << attempts << " attempts.\n";
             break;
+        }
+       
+        else if (guess > secretNumber) {
+            std::cout << "Too high! Try again.\n";
+        }
+        
+        else {
+            std::cout << "Too low! Try again.\n";
         }
     }
 
@@ -56,22 +52,42 @@ int main() {
 
 
 
+                                                                      TASK 2 
+                                                               SIMPLE CALCULATOR 
 
-                                                                 TASK 2
-                                                          SIMPLE CALCULATOR
 
-  #include <iostream>
+    #include <iostream>
 
-   int main() {
-    
-    double num1, num2, result;
 
-    
+double add(double num1, double num2) {
+    return num1 + num2;
+}
+
+
+double subtract(double num1, double num2) {
+    return num1 - num2;
+}
+
+
+double multiply(double num1, double num2) {
+    return num1 * num2;
+}
+
+
+double divide(double num1, double num2) {
+    if (num2 == 0) {
+        throw std::runtime_error("Cannot divide by zero!");
+    }
+    return num1 / num2;
+}
+
+int main() {
+    double num1, num2;
     char operation;
 
- 
-    std::cout << "Simple Calculator Program\n";
-    std::cout << "-------------------------\n";
+    
+    std::cout << "Simple Calculator\n";
+    std::cout << "-----------------\n";
     std::cout << "1. Addition (+)\n";
     std::cout << "2. Subtraction (-)\n";
     std::cout << "3. Multiplication (*)\n";
@@ -79,38 +95,39 @@ int main() {
     std::cout << "Enter your choice (1-4): ";
 
     
-    std::cin >> operation;
+    int choice;
+    std::cin >> choice;
 
     
-    std::cout << "Enter the first number: ";
+    std::cout << "Enter first number: ";
     std::cin >> num1;
-    std::cout << "Enter the second number: ";
+    std::cout << "Enter second number: ";
     std::cin >> num2;
 
     
-    switch (operation) {
-        case '1':
-            result = num1 + num2;
-            std::cout << "Result: " << num1 << " + " << num2 << " = " << result << std::endl;
+    switch (choice) {
+        case 1:
+            operation = '+';
+            std::cout << num1 << " " << operation << " " << num2 << " = " << add(num1, num2) << std::endl;
             break;
-        case '2':
-            result = num1 - num2;
-            std::cout << "Result: " << num1 << " - " << num2 << " = " << result << std::endl;
+        case 2:
+            operation = '-';
+            std::cout << num1 << " " << operation << " " << num2 << " = " << subtract(num1, num2) << std::endl;
             break;
-        case '3':
-            result = num1 * num2;
-            std::cout << "Result: " << num1 << " * " << num2 << " = " << result << std::endl;
+        case 3:
+            operation = '*';
+            std::cout << num1 << " " << operation << " " << num2 << " = " << multiply(num1, num2) << std::endl;
             break;
-        case '4':
-            if (num2 != 0) {
-                result = num1 / num2;
-                std::cout << "Result: " << num1 << " / " << num2 << " = " << result << std::endl;
-            } else {
-                std::cout << "Error: Division by zero is not allowed." << std::endl;
+        case 4:
+            operation = '/';
+            try {
+                std::cout << num1 << " " << operation << " " << num2 << " = " << divide(num1, num2) << std::endl;
+            } catch (const std::exception& e) {
+                std::cerr << e.what() << std::endl;
             }
             break;
         default:
-            std::cout << "Error: Invalid choice. Please choose a number between 1 and 4." << std::endl;
+            std::cerr << "Invalid choice!" << std::endl;
             break;
     }
 
@@ -125,15 +142,17 @@ int main() {
 
 
 
-                                                                             TASK 3 
-                                                                        TIC-TAC-TOE GAME
+                                                          
+                                                                              TASK 3
+
+                                                                              TIC-TAC-TOE
 
 
-          #include <iostream>
+#include <iostream>
 #include <vector>
 
 
-void drawBoard(const std::vector<std::vector<char>>& board) {
+void displayBoard(const std::vector<std::vector<char>>& board) {
     std::cout << " " << board[0][0] << " | " << board[0][1] << " | " << board[0][2] << std::endl;
     std::cout << "---+---+---" << std::endl;
     std::cout << " " << board[1][0] << " | " << board[1][1] << " | " << board[1][2] << std::endl;
@@ -143,13 +162,13 @@ void drawBoard(const std::vector<std::vector<char>>& board) {
 
 
 bool checkWin(const std::vector<std::vector<char>>& board, char player) {
-   
+    // Check rows
     for (int i = 0; i < 3; i++) {
         if (board[i][0] == player && board[i][1] == player && board[i][2] == player) {
             return true;
         }
     }
-  
+   
     for (int i = 0; i < 3; i++) {
         if (board[0][i] == player && board[1][i] == player && board[2][i] == player) {
             return true;
@@ -177,78 +196,67 @@ bool checkDraw(const std::vector<std::vector<char>>& board) {
 
 int main() {
     std::vector<std::vector<char>> board = {{'-', '-', '-'}, {'-', '-', '-'}, {'-', '-', '-'}};
-    char player = 'X';
-    bool playAgain = true;
+    char currentPlayer = 'X';
 
-    while (playAgain) {
-      
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                board[i][j] = '-';
-            }
+    while (true) {
+        
+        displayBoard(board);
+
+       
+        int row, col;
+        std::cout << "Player " << currentPlayer << ", enter your move (row and column): ";
+        std::cin >> row >> col;
+
+        // Update the game board with the player's move
+        if (row < 1 || row > 3 || col < 1 || col > 3) {
+            std::cout << "Invalid move! Try again." << std::endl;
+            continue;
         }
+        if (board[row - 1][col - 1] != '-') {
+            std::cout << "Cell already occupied! Try again." << std::endl;
+            continue;
+        }
+        board[row - 1][col - 1] = currentPlayer;
 
-        while (true) {
-           
-            drawBoard(board);
-
-            
-            int row, col;
-            std::cout << "Player " << player << ", enter your move (row and column): ";
-            std::cin >> row >> col;
-
-           
-            if (row < 1 || row > 3 || col < 1 || col > 3) {
-                std::cout << "Invalid move. Please try again." << std::endl;
-                continue;
-            }
-
-            
-            board[row - 1][col - 1] = player;
-
-            
-            if (checkWin(board, player)) {
-                drawBoard(board);
-                std::cout << "Player " << player << " wins!" << std::endl;
-                break;
-            }
-
-            
-            if (checkDraw(board)) {
-                drawBoard(board);
-                std::cout << "It's a draw!" << std::endl;
-                break;
-            }
-
-            
-            player = (player == 'X') ? 'O' : 'X';
+       
+        if (checkWin(board, currentPlayer)) {
+            displayBoard(board);
+            std::cout << "Player " << currentPlayer << " wins!" << std::endl;
+            break;
         }
 
         
-        std::cout << "Do you want to play again? (y/n): ";
-        char response;
-        std::cin >> response;
-        playAgain = (response == 'y');
+        if (checkDraw(board)) {
+            displayBoard(board);
+            std::cout << "It's a draw!" << std::endl;
+            break;
+        }
+
+        
+        currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+    }
+
+   
+    char playAgain;
+    std::cout << "Do you want to play again? (y/n): ";
+    std::cin >> playAgain;
+    if (playAgain == 'y') {
+        main();
     }
 
     return 0;
 }
+                                                                            
+
+                                                                                                     
 
 
 
+                                                                        TASK 4 
+                                                                    TO - DO - LIST 
 
 
-
-
-                                                              
-                                                             TASK 4 
-                                                           TO - DO - LIST
-
-
-
-
-
-            #include <iostream>
+#include <iostream>
 #include <vector>
 #include <string>
 
@@ -257,7 +265,6 @@ struct Task {
     std::string description;
     bool completed;
 };
-
 
 
 void addTask(std::vector<Task>& tasks) {
@@ -271,9 +278,14 @@ void addTask(std::vector<Task>& tasks) {
 
 
 void viewTasks(const std::vector<Task>& tasks) {
-    std::cout << "Tasks:" << std::endl;
+    std::cout << "To-Do List:" << std::endl;
     for (int i = 0; i < tasks.size(); i++) {
-        std::cout << (i + 1) << ". " << tasks[i].description << " - " << (tasks[i].completed? "Completed" : "Pending") << std::endl;
+        std::cout << "[" << (i + 1) << "] " << tasks[i].description;
+        if (tasks[i].completed) {
+            std::cout << " (Completed)" << std::endl;
+        } else {
+            std::cout << " (Pending)" << std::endl;
+        }
     }
 }
 
@@ -286,26 +298,25 @@ void markTaskAsCompleted(std::vector<Task>& tasks) {
         tasks[taskNumber - 1].completed = true;
         std::cout << "Task marked as completed!" << std::endl;
     } else {
-        std::cout << "Invalid task number." << std::endl;
+        std::cout << "Invalid task number!" << std::endl;
     }
 }
 
 
 void removeTask(std::vector<Task>& tasks) {
     int taskNumber;
-    std::cout << "Enter the task number to remove: ";
+    std::cout << "Enter the number of task to remove: ";
     std::cin >> taskNumber;
     if (taskNumber > 0 && taskNumber <= tasks.size()) {
         tasks.erase(tasks.begin() + taskNumber - 1);
         std::cout << "Task removed successfully!" << std::endl;
     } else {
-        std::cout << "Invalid task number." << std::endl;
+        std::cout << "Invalid task number!" << std::endl;
     }
 }
 
 int main() {
     std::vector<Task> tasks;
-    int choice;
 
     while (true) {
         std::cout << "To-Do List Manager" << std::endl;
@@ -316,6 +327,8 @@ int main() {
         std::cout << "4. Remove Task" << std::endl;
         std::cout << "5. Exit" << std::endl;
         std::cout << "Enter your choice: ";
+
+        int choice;
         std::cin >> choice;
 
         switch (choice) {
@@ -335,20 +348,23 @@ int main() {
                 std::cout << "Goodbye!" << std::endl;
                 return 0;
             default:
-                std::cout << "Invalid choice. Please try again." << std::endl;
+                std::cout << "Invalid choice!" << std::endl;
+                break;
         }
     }
 
     return 0;
-}
+}   
 
 
 
 
 
 
-                                 TASK 5
-                            LIBRARY MANAGEMENT SYSTEM
+                                                                          TASK 5 
+                                                                    LIBRARY MANAGEMENT SYSTEM 
+
+
 
 
 #include <iostream>
